@@ -50,7 +50,7 @@
 static hif_mngent_st *gl_hif = NULL;
 static zt_bool gl_mode_removed = zt_true;
 
-static char *cfg = "./wifi.cfg";
+static char *cfg = "/etc/zt9101_wifi.cfg";
 module_param(cfg, charp, 0644);
 
 zt_bool hm_get_mod_removed(void)

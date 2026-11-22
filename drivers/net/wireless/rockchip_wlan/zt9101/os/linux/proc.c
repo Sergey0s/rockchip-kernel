@@ -239,6 +239,13 @@ static ssize_t zt_set_rate(struct file *file, const char __user *buffer,
     char cmd[60] = {0};
     hw_info_st *hw_info;
 
+    if (count >= sizeof(cmd))
+    {
+        LOG_E("input param len is out of range");
+
+        return -EINVAL;
+    }
+
     if (copy_from_user(cmd, buffer, count))
     {
         LOG_E("copy_from_user fail");
@@ -1190,6 +1197,13 @@ static ssize_t mp_proc_wifi_set(struct file *file, const char __user *buffer,
     pnic_info = hif_info->nic_info[0];
     proc_info = (zt_proc_st *)hif_info->proc_info;
 
+    if (count >= sizeof(cmd))
+    {
+        LOG_E("input param len is out of range");
+
+        return -EINVAL;
+    }
+
     if (copy_from_user(cmd, buffer, count))
     {
         LOG_E("copy_from_user fail");
@@ -2019,6 +2033,13 @@ static ssize_t zt_proc_wifi_set(struct file *file, const char __user *buffer,
     zt_u8 *buff = NULL;
     pnic_info = hif_info->nic_info[0];
 
+    if (count >= sizeof(cmd))
+    {
+        LOG_E("input param len is out of range");
+
+        return -EINVAL;
+    }
+
     if (copy_from_user(cmd, buffer, count))
     {
         LOG_E("copy_from_user fail");
@@ -2802,10 +2823,10 @@ inline struct proc_dir_entry *zt_proc_create_entry(const zt_s8 *name,
     struct proc_dir_entry *entry;
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 26))
-    entry = proc_create_data(name,  S_IFREG | S_IRUGO | S_IWUGO, parents, fops,
+    entry = proc_create_data(name,  S_IFREG | S_IRUGO | S_IWUSR, parents, fops,
                              data);
 #else
-    entry = create_proc_entry(name, S_IFREG | S_IRUGO | S_IWUGO, parents);
+    entry = create_proc_entry(name, S_IFREG | S_IRUGO | S_IWUSR, parents);
     if (entry)
     {
         entry->data = data;
